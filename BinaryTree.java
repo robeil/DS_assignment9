@@ -1,8 +1,5 @@
 package Jan22InClassDemos.src.DS_assignment9;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BinaryTree<E> {
 
     private Node<E> root;
@@ -11,14 +8,12 @@ public class BinaryTree<E> {
     //todo creating inner class node
     private static class Node<E>{
         //todo instances field
-        private List<Node> children;
         private Node<E> left;
         private Node<E> right;
         private E data;
 
         //todo constructor for node
         private Node(E item){
-            this.children = new ArrayList<>();
             this.data = item;
             this.left = null;
             this.right = null;
@@ -31,20 +26,24 @@ public class BinaryTree<E> {
 
     }
     //todo add method
-    public Node<E> addNode(Node<E> node){
+    public Node<E> addNode(Node<E> root, E item){
         if(root == null){
-            root = node;
+            root = new Node<E>(item);
             size++;
         }
-        if((int)root.data > (int)node.data){
-            root.left = node;
+        if((int)root.data > (int)item){
+            root.left = addNode(root.left, item);
             size++;
         }
-        if((int)root.data < (int)node.data){
-            root.right = node;
+        if((int)root.data < (int)item){
+            root.right = addNode(root.right, item);
             size++;
         }
         return root;
+    }
+    //todo insert to the tree
+    public void addToTree(E item){
+        root = addNode(root, item);
     }
     //todo inorder
     public void inOrder(Node<E> root){
@@ -100,19 +99,19 @@ public class BinaryTree<E> {
     public static void main(String[] args) {
         BinaryTree myTree = new BinaryTree<>();
         //myTree = new int[55,45,47,43,54,58,76,71,50,60,68,80,91];
-        myTree.addNode(55);
-        myTree.addNode(45);
-        myTree.addNode(47);
-        myTree.addNode(43);
-        myTree.addNode(54);
-        myTree.addNode(58);
-        myTree.addNode(76);
-        myTree.addNode(71);
-        myTree.addNode(50);
-        myTree.addNode(60);
-        myTree.addNode(68);
-        myTree.addNode(80);
-        myTree.addNode(91);
+        myTree.addToTree(55);
+        myTree.addToTree(45);
+        myTree.addToTree(47);
+        myTree.addToTree(43);
+        myTree.addToTree(54);
+        myTree.addToTree(58);
+        myTree.addToTree(76);
+        myTree.addToTree(71);
+        myTree.addToTree(50);
+        myTree.addToTree(60);
+        myTree.addToTree(68);
+        myTree.addToTree(80);
+        myTree.addToTree(91);
 
         System.out.println("Preorder to traversal of binary search tree");
         myTree.preOrderTraversal();
