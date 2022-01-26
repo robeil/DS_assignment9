@@ -1,9 +1,11 @@
-package Jan22InClassDemos.src.DS_assignment9;
+package CS221Course.src.DS_assignment9;
 
-public class BinaryTree<E> {
+public class BinaryTree<E extends Comparable<E>> {
 
     private Node<E> root;
-    private int size = 0;
+    protected boolean isItAdded = false;
+    protected E isItRemoved;
+
 
     //todo creating inner class node
     private static class Node<E>{
@@ -18,35 +20,37 @@ public class BinaryTree<E> {
             this.left = null;
             this.right = null;
         }
-
     }
     //todo constructor for the BinaryTree class
     public BinaryTree(){
         root = null;
-
     }
-    //todo add method
-    public Node<E> addNode(Node<E> root, E item){
+    //todo insert method
+    private Node<E> insert(Node<E> root, E item){
+
         if(root == null){
             root = new Node<E>(item);
-            size++;
+            isItAdded =  true;
         }
-        if((int)root.data > (int)item){
-            root.left = addNode(root.left, item);
-            size++;
+        if(root.data == item){
+            isItAdded = false;
+            return root;
         }
-        if((int)root.data < (int)item){
-            root.right = addNode(root.right, item);
-            size++;
+        int comResult = root.data.compareTo(item);
+        if(comResult > 0){
+            root.left = insert(root.left, item);
+        }
+        if(comResult < 0){
+            root.right = insert(root.right, item);
         }
         return root;
     }
     //todo insert to the tree
-    public void addToTree(E item){
-        root = addNode(root, item);
+    public void insertToTree(E item){
+        root = insert(root, item);
     }
     //todo inorder
-    public void inOrder(Node<E> root){
+    private void inOrder(Node<E> root){
         if(root == null){
             return;
         }
@@ -56,7 +60,7 @@ public class BinaryTree<E> {
 
     }
     //todo preorder
-    public void preOrder(Node<E> root){
+    private void preOrder(Node<E> root){
         if(root == null){
             return;
         }
@@ -66,7 +70,7 @@ public class BinaryTree<E> {
 
     }
     //todo preorder
-    public void preOrder(Node<E> root, Node<E> child){
+    private void preOrder(Node<E> root, Node<E> child){
         if(root == null){
             return;
         }
@@ -76,7 +80,7 @@ public class BinaryTree<E> {
 
     }
     //todo postorder
-    public void postOrder(Node<E> root){
+    private void postOrder(Node<E> root){
         if(root == null){
             return;
         }
@@ -90,28 +94,87 @@ public class BinaryTree<E> {
     }
     // todo In-order traversal
     public void inOrderTraversal(){
-      inOrder(root);
+        inOrder(root);
     }
     // todo Post-order traversal
     public void postOrderTraversal(){
         postOrder(root);
     }
+
+    //todo search method
+    private E search(Node<E> root, E item){
+        if(root == null){
+            return null;
+        }
+        int comResult = item.compareTo(root.data);
+        if (comResult == 0) {
+            return root.data;
+        } else if (comResult < 0) {
+            return search(root.left, item);
+        } else {
+            return search(root.right, item);
+        }
+    }
+    //todo search m node from the element
+    public E searchItem(E item){ //fixme ???????
+        return search(root, item);
+    }
+    //todo delete method
+    private Node<E> delete(Node<E> root, E itemToRemove){
+        if(root == null){
+            return root;
+        }
+        int comp = itemToRemove.compareTo(root.data);
+        if(comp < 0){
+            root.left = delete(root.left, itemToRemove);
+            return root.left;
+        } else if(comp > 0){
+            root.right = delete(root.right, itemToRemove);
+            return root.right;
+        } else {
+            isItRemoved =  root.data;
+            if(root.left.right == null){
+                root.data = root.left.data;
+                root.left = root.left.left;
+                return root;
+            } else{
+                root.data = findPredessor(root.left);
+                return root;
+            }
+        }
+    }
+    //todo delete method
+    public Node<E> delete(E itemToRemove){
+        return delete(root, itemToRemove);
+    }
+    //todo find predessor method
+    private E findPredessor(Node<E> parent){
+        if(parent.right.right == null){
+            E returnValue = parent.data;
+            parent.right = parent.left;
+            return returnValue;
+        } else {
+            return findPredessor(parent.right);
+        }
+    }
+    //todo main method
     public static void main(String[] args) {
+
         BinaryTree myTree = new BinaryTree<>();
         //myTree = new int[55,45,47,43,54,58,76,71,50,60,68,80,91];
-        myTree.addToTree(55);
-        myTree.addToTree(45);
-        myTree.addToTree(47);
-        myTree.addToTree(43);
-        myTree.addToTree(54);
-        myTree.addToTree(58);
-        myTree.addToTree(76);
-        myTree.addToTree(71);
-        myTree.addToTree(50);
-        myTree.addToTree(60);
-        myTree.addToTree(68);
-        myTree.addToTree(80);
-        myTree.addToTree(91);
+        myTree.insertToTree(55);
+        myTree.insertToTree(45);
+        myTree.insertToTree(47);
+        myTree.insertToTree(43);
+        myTree.insertToTree(54);
+        myTree.insertToTree(58);
+        myTree.insertToTree(76);
+        myTree.insertToTree(71);
+        myTree.insertToTree(50);
+        myTree.insertToTree(60);
+        myTree.insertToTree(68);
+        myTree.insertToTree(80);
+        myTree.insertToTree(91);
 
         System.out.println("Preorder to traversal of binary search tree");
         myTree.preOrderTraversal();
@@ -119,5 +182,57 @@ public class BinaryTree<E> {
         myTree.inOrderTraversal();
         System.out.println("\nPostorder to traversal of binary search tree");
         myTree.postOrderTraversal();
+        System.out.println("\nSearching for item");
+        System.out.println(myTree.searchItem(91));
+
+        /*todo ---> after removing 47 the successor will become 54
+         todo --->  after removing 76 the succesor will be become 80
+
+        todo after removing 50 and 68
+                                        55
+                                        /\
+                                       /  \
+                                      45   58
+                                    /  \     \
+                                   /     \     \
+                                 43      47   76
+                                        /     / \
+                                       /     /   \
+                                     54    71     80
+                                        /          \
+                                       /            \
+                                     60             91
+
+         todo after removing 47 and 80 the tree will look the same but minus two leaf(external nodes)
+                                        55
+                                        /\
+                                       /  \
+                                      45   58
+                                    /  \     \
+                                   /     \     \
+                                 43      54   76
+                                             / \
+                                            /   \
+                                         71      91
+                                        /
+                                       /
+                                     60
+
+            todo The draw after removing 47 and 80
+                                        55
+                                        /\
+                                       /  \
+                                     54   58
+                                     /      \
+                                   /          \
+                                43            91
+                                             /
+                                            /
+                                         71
+                                        /
+                                       /
+                                      60
+
+         */
     }
 }
