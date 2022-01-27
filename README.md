@@ -17,10 +17,24 @@ Note: Similarly practice by yourself for all the operations of binary search tre
 
 a. Implement the code for void preOrder(){ }
 b. Implement the code for void postOrder(){ }
-c. Implement the code to count the leaf nodes int leafCount(){*todo ---> after removing 47 the successor will become 54
-todo --->  after removing 76 the succesor will be become 80
+c. Implement the code to count the leaf nodes 
 
-        todo after removing 50 and 68
+
+![](img.png)
+
+    todo   (B) Preorder to traversal of binary search tree
+            55 45 43 47 54 50 58 76 71 60 68 80 91
+
+    todo   (C) Inorder to traversal of binary search tree
+            43 45 47 50 54 55 58 60 68 71 76 80 91
+
+    todo    (D) Postorder to traversal of binary search tree
+            43 50 54 47 45 68 60 71 91 80 76 58 55
+
+
+    todo    (E) after removing 47 and 76 the successor will become 50 and 80
+
+    todo    (F) after removing 50 and 68
                                         55
                                         /\
                                        /  \
@@ -35,7 +49,7 @@ todo --->  after removing 76 the succesor will be become 80
                                        /            \
                                      60             91
 
-         todo after removing 47 and 80 the tree will look the same but minus two leaf(external nodes)
+    todo     (G)  after removing 47 and 80 the tree will look the same but minus two leaf(external nodes)
                                         55
                                         /\
                                        /  \
@@ -50,7 +64,7 @@ todo --->  after removing 76 the succesor will be become 80
                                        /
                                      60
 
-            todo The draw after removing 47 and 80
+    todo     (H)  The draw after removing 45 and 76
                                         55
                                         /\
                                        /  \
@@ -63,4 +77,4 @@ todo --->  after removing 76 the succesor will be become 80
                                          71
                                         /
                                        /
-                                      60}
+                                      60                                      60}

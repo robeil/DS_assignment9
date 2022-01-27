@@ -1,10 +1,11 @@
-package CS221Course.src.DS_assignment9;
+package DS_assignment9;
 
 public class BinaryTree<E extends Comparable<E>> {
 
     private Node<E> root;
     protected boolean isItAdded = false;
     protected E isItRemoved;
+    protected int size = 0;
 
 
     //todo creating inner class node
@@ -31,6 +32,7 @@ public class BinaryTree<E extends Comparable<E>> {
         if(root == null){
             root = new Node<E>(item);
             isItAdded =  true;
+            size++;
         }
         if(root.data == item){
             isItAdded = false;
@@ -39,9 +41,11 @@ public class BinaryTree<E extends Comparable<E>> {
         int comResult = root.data.compareTo(item);
         if(comResult > 0){
             root.left = insert(root.left, item);
+            size++;
         }
         if(comResult < 0){
             root.right = insert(root.right, item);
+            size++;
         }
         return root;
     }
@@ -132,14 +136,20 @@ public class BinaryTree<E extends Comparable<E>> {
             root.right = delete(root.right, itemToRemove);
             return root.right;
         } else {
-            isItRemoved =  root.data;
-            if(root.left.right == null){
-                root.data = root.left.data;
-                root.left = root.left.left;
-                return root;
-            } else{
-                root.data = findPredessor(root.left);
-                return root;
+            isItRemoved = root.data;
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                if (root.left.right == null) {
+                    root.data = root.left.data;
+                    root.left = root.left.left;
+                    return root;
+                } else {
+                    root.data = findPredessor(root.left);
+                    return root;
+                }
             }
         }
     }
@@ -157,11 +167,25 @@ public class BinaryTree<E extends Comparable<E>> {
             return findPredessor(parent.right);
         }
     }
-    //todo main method
+
+    //todo size method
+    public int countNode(){
+        return countNode(root);
+    }
+
+    //todo count node
+    private int countNode(Node<E> root){
+        if(root == null){
+            return 0;
+        }
+        return 1 + countNode(root.left) + countNode(root.right);
+    }
+
+    // todo main method
     public static void main(String[] args) {
 
         BinaryTree myTree = new BinaryTree<>();
-        //myTree = new int[55,45,47,43,54,58,76,71,50,60,68,80,91];
+        // todo (A)  //myTree = new int[55,45,47,43,54,58,76,71,50,60,68,80,91];
         myTree.insertToTree(55);
         myTree.insertToTree(45);
         myTree.insertToTree(47);
@@ -182,13 +206,25 @@ public class BinaryTree<E extends Comparable<E>> {
         myTree.inOrderTraversal();
         System.out.println("\nPostorder to traversal of binary search tree");
         myTree.postOrderTraversal();
-        System.out.println("\nSearching for item");
-        System.out.println(myTree.searchItem(91));
+        System.out.println("\nFound it : " + myTree.searchItem(91));
+        System.out.println("Is it deleted : " + myTree.delete(91));
+        System.out.println("Total number of nodes : " + myTree.countNode());
 
-        /*todo ---> after removing 47 the successor will become 54
-         todo --->  after removing 76 the succesor will be become 80
+        /*
 
-        todo after removing 50 and 68
+    todo   (B) Preorder to traversal of binary search tree
+            55 45 43 47 54 50 58 76 71 60 68 80 91
+
+    todo   (C) Inorder to traversal of binary search tree
+            43 45 47 50 54 55 58 60 68 71 76 80 91
+
+    todo    (D) Postorder to traversal of binary search tree
+            43 50 54 47 45 68 60 71 91 80 76 58 55
+
+
+    todo    (E) after removing 47 and 76 the successor will become 50 and 80
+
+    todo    (F) after removing 50 and 68
                                         55
                                         /\
                                        /  \
@@ -203,7 +239,7 @@ public class BinaryTree<E extends Comparable<E>> {
                                        /            \
                                      60             91
 
-         todo after removing 47 and 80 the tree will look the same but minus two leaf(external nodes)
+    todo     (G)  after removing 47 and 80 the tree will look the same but minus two leaf(external nodes)
                                         55
                                         /\
                                        /  \
@@ -218,7 +254,7 @@ public class BinaryTree<E extends Comparable<E>> {
                                        /
                                      60
 
-            todo The draw after removing 47 and 80
+    todo     (H)  The draw after removing 45 and 76
                                         55
                                         /\
                                        /  \
